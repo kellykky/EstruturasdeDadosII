@@ -1,87 +1,125 @@
-Índice Remissivo utilizando Árvore AVL
-1. Introdução
+README – Índice Remissivo com Árvore AVL
 
-Este trabalho tem como objetivo a construção de um índice remissivo a partir de um arquivo de texto, relacionando cada palavra às linhas em que aparece. O índice remissivo permite organizar informações de forma estruturada e facilita a consulta posterior dos termos presentes no texto.
+Introdução
 
-Para a implementação da solução foi utilizada uma Árvore AVL, que é uma árvore binária de busca auto-balanceada. Essa estrutura foi escolhida por garantir eficiência nas operações de inserção e busca, mantendo complexidade O(log n), mesmo com o crescimento da quantidade de dados.
+O objetivo deste trabalho foi desenvolver um índice remissivo a partir de um texto, associando cada palavra às linhas em que ela aparece. 
 
-O projeto foi dividido em dois arquivos principais:
+O código foi feito com base em uma árvore binária de busca auto-balanceada do tipo AVL. A escolha dessa estrutura se justifica pela necessidade de manter as operações de inserção e busca com desempenho eficiente, mesmo com grande volume de palavras. A árvore AVL garante altura balanceada, mantendo a complexidade das operações principais em O(log n).
 
-avl.py, responsável pela implementação da árvore AVL;
+O problema do índice remissivo foi resolvido da seguinte forma: o texto é lido linha por linha; cada linha é normalizada (remoção de pontuação e conversão para minúsculas); as palavras são extraídas e inseridas na árvore juntamente com o número da linha correspondente. Quando uma palavra já existe na árvore, apenas a nova linha é adicionada à sua lista de ocorrências. Ao final, a árvore é percorrida em ordem (in-order), produzindo as palavras em ordem alfabética, cada uma acompanhada das linhas em que aparece.
 
-main.py, responsável pela leitura do arquivo e construção do índice.
+Estruturas de Dados Utilizadas
 
-2. Estrutura da Solução
+A estrutura principal é a Árvore AVL, implementada com nós que armazenam:
 
-A árvore AVL armazena as palavras em ordem alfabética. Cada nó da árvore contém:
+A palavra (chave de ordenação);
 
-A palavra (chave);
-
-Uma lista com os números das linhas onde a palavra ocorre;
+Uma lista de números de linha onde a palavra ocorre;
 
 Referências para os filhos esquerdo e direito;
 
-A altura do nó, utilizada para controle do balanceamento.
+A altura do nó, utilizada no cálculo do fator de balanceamento.
 
-Durante a inserção, caso a palavra já exista na árvore, apenas a linha correspondente é adicionada à lista de ocorrências. Caso contrário, um novo nó é criado.
+Cada nó é representado pela classe No, cujo construtor recebe a palavra e o número da linha inicial. A lista de linhas é iniciada com esse primeiro valor.
 
-O balanceamento da árvore é mantido por meio de rotações simples ou duplas, sempre que o fator de balanceamento ultrapassa os limites permitidos (-1, 0 ou 1).
+A classe AVL é responsável por todas as operações sobre a árvore, incluindo inserção, balanceamento por rotações, buscas e geração do índice final.
 
-3. Funcionamento do Índice Remissivo
+Documentação do Código
 
-O processo de construção do índice ocorre da seguinte forma:
+Arquivo no.py
 
-O arquivo é lido linha por linha.
+A classe No define a estrutura básica de cada elemento da árvore. Seus atributos são:
 
-As palavras são separadas e normalizadas (conversão para minúsculas e remoção de pontuação).
+palavra: string que funciona como chave de ordenação;
 
-Cada palavra é inserida na Árvore AVL juntamente com o número da linha.
+linhas: lista de inteiros com os números das linhas onde a palavra aparece;
 
-Ao final, a árvore é percorrida em ordem (in-order), garantindo que as palavras sejam exibidas em ordem alfabética.
+esquerda e direita: referências para os filhos;
 
-Esse procedimento gera um índice organizado e eficiente para consulta.
+altura: inteiro que representa a altura do nó na árvore.
 
-4. Documentação do Código
-4.1 Arquivo avl.py
+Essa classe não implementa lógica de balanceamento; ela apenas representa o elemento estrutural da árvore.
 
-Contém a implementação da estrutura da árvore AVL.
+Arquivo avl.py
 
-Classe Node
-Representa cada nó da árvore, armazenando a palavra, a lista de linhas e informações necessárias para o balanceamento.
+A classe AVL implementa a árvore propriamente dita. Entre suas principais responsabilidades estão:
 
-Classe AVLTree
-Responsável pelas operações principais:
+Inserção de palavras: o método inserir(palavra, linha) posiciona a palavra conforme as regras de árvore binária de busca. Se a palavra já existir, apenas adiciona o número da linha à lista correspondente. Caso contrário, cria um novo nó.
 
-insert() – Insere palavras e realiza o balanceamento.
+Atualização de altura: após cada inserção, a altura dos nós é recalculada.
 
-left_rotate() – Executa rotação à esquerda.
+Cálculo do fator de balanceamento: a diferença entre as alturas das subárvores esquerda e direita é utilizada para verificar se o nó está desbalanceado.
 
-right_rotate() – Executa rotação à direita.
+Rotações: quando o fator de balanceamento ultrapassa os limites permitidos (-1, 0 ou 1), são realizadas rotações simples (à esquerda ou à direita) ou rotações duplas, garantindo que a árvore permaneça balanceada.
 
-get_height() – Retorna a altura do nó.
+Busca de palavra: permite verificar se um termo está presente e obter informações associadas.
 
-get_balance() – Calcula o fator de balanceamento.
+Busca aproximada: retorna palavras que começam com determinado prefixo, percorrendo a árvore e filtrando os termos.
 
-in_order() – Percorre a árvore em ordem alfabética.
+Palavra mais frequente: percorre a árvore para identificar a palavra que aparece no maior número de linhas.
 
-4.2 Arquivo main.py
+Geração do índice: realiza percurso em ordem (in-order), produzindo uma lista de strings no formato “palavra: linhas”.
 
-Responsável por:
+A classe também mantém contadores, como o total de palavras distintas e o número total de rotações realizadas durante a construção da árvore.
 
-Ler o arquivo de entrada;
+Arquivo main.py
 
-Processar e normalizar as palavras;
+O arquivo principal coordena a execução do programa. Suas etapas são:
 
-Inseri-las na árvore AVL;
+Leitura do arquivo de texto por meio da função carregar_texto, que retorna as linhas do arquivo.
 
-Exibir o índice remissivo final.
+Processamento de cada linha:
 
-5. Exemplo de Uso
-Entrada:
-Estruturas de dados são importantes.
-Árvores são estruturas eficientes.
+Remoção de pontuação com expressão regular;
 
-Saída:
+Conversão para minúsculas;
+
+Separação em palavras.
+
+Inserção das palavras na árvore AVL, junto com o número da linha.
+
+Execução de testes de funcionalidades:
+
+Busca de um termo específico;
+
+Busca por prefixo;
+
+Identificação da palavra mais frequente.
+
+Geração do arquivo de saída indice_remissivo.txt, contendo o índice e estatísticas como:
+
+Total de palavras lidas;
+
+Total de palavras distintas;
+
+Palavras descartadas;
+
+Tempo de construção;
+
+Total de rotações realizadas.
+
+Exemplos de Uso
+
+Considere o seguinte texto de entrada:
+
+Linha 1: Estruturas de dados são importantes
+Linha 2: Árvores são estruturas eficientes
+
+Durante o processamento, as palavras são normalizadas (minúsculas e sem pontuação) e inseridas na árvore:
+
+arvore.inserir("estruturas", 1)
+arvore.inserir("dados", 1)
+arvore.inserir("sao", 1)
+arvore.inserir("importantes", 1)
+arvore.inserir("arvores", 2)
+arvore.inserir("sao", 2)
+arvore.inserir("estruturas", 2)
+arvore.inserir("eficientes", 2)
+
+Como “sao” e “estruturas” já existiam, apenas a linha 2 é adicionada às suas listas.
+
+Ao gerar o índice (percurso em ordem), a saída será:
+
 arvores: 2
 dados: 1
 eficientes: 2
@@ -89,6 +127,19 @@ estruturas: 1, 2
 importantes: 1
 sao: 1, 2
 
+Exemplo de busca aproximada:
 
-As palavras são apresentadas em ordem alfabética, seguidas das linhas em que aparecem.
+arvore.busca_aproximada("es")
+
+Possível saída:
+
+["estruturas", "eficientes"]
+
+Exemplo de palavra mais frequente:
+
+arvore.palavra_mais_frequente()
+
+Saída possível:
+
+("estruturas", 2)
 
